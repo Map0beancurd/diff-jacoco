@@ -16,8 +16,7 @@ public interface CoverageRecordDao {
     @SQL("select type from #table where project=:1 and class_name=:2 and method_md5=:3 and line_md5=:4")
     String getType(String project, String className,String methodMd5, String lineMd5);
 
-    @SQL("insert into #table(" + COLS + ") values(:project,:className,:method,:line,:methodMd5," +
-            ":lineMd5,:type) ON DUPLICATE KEY UPDATE type=:type")
+    @SQL("replace into #table(" + COLS + ") values(:project,:className,:method,:line,:methodMd5, :lineMd5,:type)")
     int addOrUpdate(CoverageDto coverage);
 
     @SQL("delete from #table where project=:1 and class_name=:2 and method=:3")

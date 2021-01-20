@@ -18,6 +18,6 @@ JAVA_OPTS="-server $JAVA_HEAP_OPTS"
 JAVA_OPTS="${JAVA_OPTS} -XX:+UseConcMarkSweepGC -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:HeapDumpPath=$LOG_PATH -Xloggc:$LOG_PATH/gc.log"
 
 # CONFIG_OPTS
-CONFIG_OPTS="--mysql-jdbc-url $MYSQL_JDBC_URL --mysql-user $MYSQL_USER --mysql-password $MYSQL_PASSWORD"
+CONFIG_OPTS="--db-jdbc-url $DB_JDBC_URL --db-user $DB_USER --db-password $DB_PASSWORD"
 
 java $JAVA_OPTS -cp $LIB_JARS $SERVICE_NAME $CONFIG_OPTS $@ > $LOG_PATH/jacoco.log 2>&1

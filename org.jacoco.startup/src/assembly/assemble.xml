@@ -20,7 +20,10 @@
             <source>scripts/jacoco.conf</source>
             <outputDirectory>conf</outputDirectory>
         </file>
-
+        <file>
+            <source>scripts/JacocoDiff.db</source>
+            <outputDirectory>conf</outputDirectory>
+        </file>
         <!-- bin files -->
         <file>
             <source>scripts/jacoco.sh</source>

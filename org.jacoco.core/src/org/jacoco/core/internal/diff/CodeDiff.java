@@ -118,6 +118,9 @@ public class CodeDiff {
             ObjectId head = repo.resolve(newTag + "^{tree}");
             ObjectId previousHead = repo.resolve(oldTag + "^{tree}");
 
+            //ObjectId head = ObjectId.fromString(newTag);
+            //ObjectId previousHead = ObjectId.fromString(oldTag);
+
             // Instanciate a reader to read the data from the Git database
             ObjectReader reader = repo.newObjectReader();
             // Create the tree iterator for each commit

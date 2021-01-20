@@ -169,9 +169,9 @@ public class ReportGenerator {
     private static final String REMOTE_PORT = "remote-port";
     private static final String EXEC_DIR = "exec-dir";
     private static final String REPORT_DIR = "report-dir";
-    private static final String MYSQL_JDBC_URL = "mysql-jdbc-url";
-    private static final String MYSQL_USER = "mysql-user";
-    private static final String MYSQL_PASSWORD = "mysql-password";
+    private static final String DB_JDBC_URL = "db-jdbc-url";
+    private static final String DB_USER = "db-user";
+    private static final String DB_PASSWORD = "db-password";
 
     public static void main(final String[] args) {
         try {
@@ -179,19 +179,19 @@ public class ReportGenerator {
             String execFile;
             String reportDir = commandLine.getOptionValue(REPORT_DIR);
             if (!commandLine.hasOption(EXEC_DIR)) {
-                execFile = reportDir.endsWith("/") ? reportDir + "exec/sq_jacoco.exec" :
-                        reportDir + "/exec/sq_jacoco.exec";
+                execFile = reportDir.endsWith("/") ? reportDir + "exec/jacoco-ut.exec" :
+                        reportDir + "/exec/jacoco-ut.exec";
             } else {
                 String execDir = commandLine.getOptionValue(EXEC_DIR);
-                execFile = execDir.endsWith("/") ? execDir + "sq_jacoco.exec" :
-                        execDir + "/sq_jacoco.exec";
+                execFile = execDir.endsWith("/") ? execDir + "jacoco-ut.exec" :
+                        execDir + "/jacoco-ut.exec";
             }
             //下载exec文件
-            ExecutionDataClient client = new ExecutionDataClient(
-                    new File(execFile),
-                    commandLine.getOptionValue(REMOTE_HOST),
-                    Integer.parseInt(commandLine.getOptionValue(REMOTE_PORT)));
-            client.dump();
+            //ExecutionDataClient client = new ExecutionDataClient(
+            //        new File(execFile),
+            //        commandLine.getOptionValue(REMOTE_HOST),
+            //        Integer.parseInt(commandLine.getOptionValue(REMOTE_PORT)));
+            //client.dump();
 
             //生成报告
             String branch = commandLine.getOptionValue(BRANCH);
@@ -212,10 +212,10 @@ public class ReportGenerator {
             for (int i = 0; i < sourceDirs.length; ++i) {
                 sourceDirFiles[i] = new File(sourceDirs[i]);
             }
-            String mysqlJdbcUrl = commandLine.getOptionValue(MYSQL_JDBC_URL);
-            String userName = commandLine.getOptionValue(MYSQL_USER);
-            String password = commandLine.getOptionValue(MYSQL_PASSWORD);
-            CoverageBuilder.init(mysqlJdbcUrl, userName, password, title);
+            String jdbcUrl = commandLine.getOptionValue(DB_JDBC_URL);
+            String userName = commandLine.getOptionValue(DB_USER);
+            String password = commandLine.getOptionValue(DB_PASSWORD);
+            CoverageBuilder.init(jdbcUrl, userName, password, title);
             create(title, new File(execFile),
                     new File(reportDir),
                     sourceDirFiles,
@@ -243,9 +243,9 @@ public class ReportGenerator {
         options.addOption(null, REMOTE_PORT, true, "远端端口");
         options.addOption(null, EXEC_DIR, true, "exec文件生成的目录");
         options.addOption(null, REPORT_DIR, true, "测试报告生成的目录");
-        options.addOption(null, MYSQL_JDBC_URL, true, "mysql jdbc地址");
-        options.addOption(null, MYSQL_USER, true, "连接mysql的用户");
-        options.addOption(null, MYSQL_PASSWORD, true, "连接mysql的密码");
+        options.addOption(null, DB_JDBC_URL, true, "db jdbc地址");
+        options.addOption(null, DB_USER, true, "连接db的用户");
+        options.addOption(null, DB_PASSWORD, true, "连接db的密码");
         return new DefaultParser().parse(options, args, true);
     }
 

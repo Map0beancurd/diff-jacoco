@@ -61,20 +61,34 @@ public class CoverageBuilder implements ICoverageVisitor {
 
     public static String project;
 
-    public static void init(String mysqlJdbcUrl, String userName, String password, String title) {
+    public static void init(String jdbcUrl, String userName, String password, String title) {
         if (coverageRecordDao == null) {
             synchronized (CoverageBuilder.class) {
-                if (coverageRecordDao == null) {
+                //mysql
+                if (coverageRecordDao == null && jdbcUrl.startsWith("jdbc:mysql")) {
                     HikariConfig config = new HikariConfig();
                     config.setDriverClassName("com.mysql.jdbc.Driver");
                     /*config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/store?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8");*/
-                    config.setJdbcUrl(mysqlJdbcUrl);
+                    config.setJdbcUrl(jdbcUrl);
                     config.setMaximumPoolSize(10);
                     config.setMinimumIdle(5);
                     config.setUsername(userName);
                     config.setPassword(password);
                     config.setConnectionTimeout(3000);
                     config.setPoolName("JacocoCoverage");
+                    Mango mango = Mango.newInstance(new HikariDataSource(config));
+                    coverageRecordDao = mango.create(CoverageRecordDao.class);
+                    coverageRateRecordDao = mango.create(CoverageRateRecordDao.class);
+                    project = title;
+                } else if (coverageRecordDao == null && jdbcUrl.startsWith("jdbc:sqlite")) {
+                    HikariConfig config = new HikariConfig();
+                    config.setPoolName("JacocoCoverage");
+                    config.setDriverClassName("org.sqlite.JDBC");
+                    config.setJdbcUrl(jdbcUrl);
+                    config.setAutoCommit(true);
+                    config.setMaximumPoolSize(1);
+                    config.setMinimumIdle(8);
+                    config.setConnectionTimeout(3000);
                     Mango mango = Mango.newInstance(new HikariDataSource(config));
                     coverageRecordDao = mango.create(CoverageRecordDao.class);
                     coverageRateRecordDao = mango.create(CoverageRateRecordDao.class);
