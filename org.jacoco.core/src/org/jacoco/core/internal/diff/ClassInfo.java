@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.jacoco.core.internal.diff;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ClassInfo {
     /**
@@ -102,6 +102,10 @@ public class ClassInfo {
     }
 
     public void setMethodInfos(List<MethodInfo> methodInfos) {
-        this.methodInfos = methodInfos.stream().collect(Collectors.toMap(MethodInfo::getMethodName, m -> m));
+        //this.methodInfos = methodInfos.stream().collect(Collectors.toMap(MethodInfo::getMethodName, m -> m));
+        this.methodInfos = new HashMap<String, MethodInfo>();
+        for (MethodInfo info : methodInfos) {
+            this.methodInfos.put(info.getMethodName(), info);
+        }
     }
 }
